@@ -3,24 +3,32 @@ import { StyleSheet, Image, TouchableOpacity, Text, View } from "react-native";
 
 function InitialCard() {
   return (
-    <View style={styles.initialCard}>
-      <Image
-        style={styles.img}
-        source={require("../assets/Images/portada-app.jpg")}
-      />
-      <View style={styles.containerBtns}>
-        <TouchableOpacity style={styles.btn}>
-          <Text style={styles.txtBtn}>REGISTRA'T</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.btn}>
-          <Text style={styles.txtBtn}>INICIA SESSIÓ</Text>
-        </TouchableOpacity>
+    <View style={styles.container}>
+      <View style={styles.initialCard}>
+        <Image
+          style={styles.img}
+          source={require("../assets/Images/portada-app.jpg")}
+        />
+        <View style={styles.containerBtns}>
+          <TouchableOpacity style={styles.btn}>
+            <Text style={styles.txtBtn}>REGISTRA'T</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.btn}>
+            <Text style={styles.txtBtn}>INICIA SESSIÓ</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#A3B6C6",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   initialCard: {
     alignItems: "center",
   },

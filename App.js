@@ -1,19 +1,27 @@
-import { StyleSheet, Image, TouchableOpacity, Text, View } from "react-native";
 import InitialCard from "./Components/InitialCard";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import LoginForm from "./Components/LoginForm";
+import SignInForm from "./Components/SignInForm";
 
 export default function App() {
+  const Stack = createNativeStackNavigator();
+
   return (
-    <View style={styles.container}>
-      <InitialCard/>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="InitialScreen"
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="Login" component={LoginForm} />
+        <Stack.Screen name="InitialScreen" component={InitialCard} />
+        
+        <Stack.Screen name="SignInScreen" component={SignInForm} />
+
+      </Stack.Navigator>
+    </NavigationContainer>
+
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#A3B6C6",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
