@@ -1,7 +1,12 @@
 import React from "react";
 import { StyleSheet, Image, TouchableOpacity, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 function InitialCard() {
+
+  const navigation = useNavigation(); 
+
+
   return (
     <View style={styles.container}>
       <View style={styles.initialCard}>
@@ -10,10 +15,10 @@ function InitialCard() {
           source={require("../assets/Images/portada-app.jpg")}
         />
         <View style={styles.containerBtns}>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("LoginScreen")}>
             <Text style={styles.txtBtn}>REGISTRA'T</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("SignInScreen")}>
             <Text style={styles.txtBtn}>INICIA SESSIÓ</Text>
           </TouchableOpacity>
         </View>
@@ -45,13 +50,13 @@ const styles = StyleSheet.create({
 
   txtBtn: {
     fontWeight: "900",
-    fontSize: 18,
+    fontSize: 14,
     alignSelf: "center",
   },
   btn: {
     backgroundColor: "#DBE9EC",
     padding: 2,
-    width: 180,
+    width: 140,
     borderColor: "#000000",
     borderWidth: 2,
     marginLeft: 10,
