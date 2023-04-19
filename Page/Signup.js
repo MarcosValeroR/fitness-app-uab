@@ -1,23 +1,17 @@
 import React from "react";
-import { useFonts } from "expo-font";
 import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity,
   TextInput,
 } from "react-native";
-import Icon from "react-native-vector-icons/AntDesign";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationIcon } from "../Components/NavigationIcon";
 
 function SignUp() {
-  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.headerScreen}>
-        <TouchableOpacity onPress={() => navigation.navigate("InitialScreen")}>
-          <Icon name="arrowleft" size={35} style={styles.arrowLeft} />
-        </TouchableOpacity>
+        <NavigationIcon stylesIcon={styles.arrowLeft} screenToNavigate={"InitialScreen"} size={35} iconName={"arrowleft"}/>
         <Text style={styles.txtTitle}>BENVINGUT NOU USUARI!</Text>
       </View>
       <View style={styles.bodyScreen}>
