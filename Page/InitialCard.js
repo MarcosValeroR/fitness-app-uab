@@ -1,12 +1,8 @@
 import React from "react";
-import { StyleSheet, Image, TouchableOpacity, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Image, View } from "react-native";
+import { NavigationButton } from "../Components/NavigationButton";
 
 function InitialCard() {
-
-  const navigation = useNavigation(); 
-
-
   return (
     <View style={styles.container}>
       <View style={styles.initialCard}>
@@ -15,12 +11,8 @@ function InitialCard() {
           source={require("../assets/Images/portada-app.jpg")}
         />
         <View style={styles.containerBtns}>
-          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("SignupScreen")}>
-            <Text style={styles.txtBtn}>REGISTRA'T</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("LoginScreen")}>
-            <Text style={styles.txtBtn}>INICIA SESSIÓ</Text>
-          </TouchableOpacity>
+          <NavigationButton stylesBtn={styles.btn} screenToNavigate="SignupScreen" text="REGISTRA'T"styleText={styles.txtBtn} />
+          <NavigationButton stylesBtn={styles.btn} screenToNavigate="LoginScreen" text="INICIA SESSIÓ"styleText={styles.txtBtn} />
         </View>
       </View>
     </View>
