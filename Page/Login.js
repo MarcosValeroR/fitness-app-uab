@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
-function SignInForm() {
+function Login() {
   return (
     <View style={styles.container}>
       <Text>Sign in form</Text>
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#A3B6C6",
   },
 });
-export default SignInForm;
+export default Login;
