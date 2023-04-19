@@ -1,4 +1,5 @@
 import React from "react";
+import { useFonts } from "expo-font";
 import {
   Text,
   View,
@@ -9,7 +10,7 @@ import {
 import Icon from "react-native-vector-icons/AntDesign";
 import { useNavigation } from "@react-navigation/native";
 
-function LoginForm() {
+function SignUp() {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -80,6 +81,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginLeft: 10,
     fontWeight: "500",
+
+
   },
 
   bodyScreen: {
@@ -88,4 +91,4 @@ const styles = StyleSheet.create({
     alignContent: "center",
   },
 });
-export default LoginForm;
+export default SignUp;

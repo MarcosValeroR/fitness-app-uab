@@ -15,10 +15,10 @@ function InitialCard() {
           source={require("../assets/Images/portada-app.jpg")}
         />
         <View style={styles.containerBtns}>
-          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("LoginScreen")}>
+          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("SignupScreen")}>
             <Text style={styles.txtBtn}>REGISTRA'T</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("SignInScreen")}>
+          <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate("LoginScreen")}>
             <Text style={styles.txtBtn}>INICIA SESSIÓ</Text>
           </TouchableOpacity>
         </View>
