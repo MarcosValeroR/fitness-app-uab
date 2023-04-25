@@ -4,7 +4,7 @@ import { Text, View, StyleSheet } from "react-native";
 function Login() {
   return (
     <View style={styles.container}>
-      <Text>Sign in form</Text>
+      <Text>Log in form</Text>
     </View>
   );
 }
