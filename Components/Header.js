@@ -23,7 +23,6 @@ function Header({headerTitle}) {
 
 const styles = StyleSheet.create({
     headerScreen: {
-        flex: 0.8,
         flexDirection: "row",
         paddingBottom: 10,
         borderBottomColor: "black",

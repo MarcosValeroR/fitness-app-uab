@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Text,
   View,
   StyleSheet,
   Dimensions,
@@ -12,7 +11,6 @@ import GenderPicker from "../Components/GenderPicker";
 import Input from "../Components/Input";
 import BornDate from "../Components/BornDate";
 import { NavigationButton } from "../Components/NavigationButton";
-import { VerticalAlignMiddleOutlined } from "@ant-design/icons";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -119,7 +117,7 @@ const styles = StyleSheet.create({
   },
 
   inptPicker: {
-    backgroundColor: "white",
+    backgroundColor: "#FFFFFF",
     width: windowWidth - 30,
     borderColor: "black",
     borderWidth: 1
@@ -127,7 +125,7 @@ const styles = StyleSheet.create({
 
   inpt: {
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: "#FFFFFF",
     width: windowWidth - 30,
     height: 50,
     color: "black",
