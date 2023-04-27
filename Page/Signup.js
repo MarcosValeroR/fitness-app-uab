@@ -3,16 +3,16 @@ import {
   Text,
   View,
   StyleSheet,
-  TextInput,
   Dimensions,
   SafeAreaView,
   StatusBar,
-  Button,
 } from "react-native";
 import Header from "../Components/Header";
 import GenderPicker from "../Components/GenderPicker";
 import Input from "../Components/Input";
 import BornDate from "../Components/BornDate";
+import { NavigationButton } from "../Components/NavigationButton";
+import { VerticalAlignMiddleOutlined } from "@ant-design/icons";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -58,11 +58,11 @@ function SignUp() {
         <View style={styles.form}>
           <GenderPicker gender={gender} handleGenderPicker={handleGenderPicker} inputStyle={styles.input} textStyle={styles.txt} inputPickerStyle={styles.inptPicker}/>
           <Input containerStyle={styles.input} textStyle={styles.txt} labelText={"Nom"} inputStyle={styles.inpt} initialValue={userName} handleChange={handleChangeName}/>
-          <BornDate containerStyle={styles.input} textStyle={styles.txt} inputStyle={styles.inpt} initialValue={birthdayDate} btnStyle={styles.btn} textBtnStyle={styles.txtBtn} handleChangeDate={handleChangeDate}/>
+          <BornDate containerStyle={styles.input} textStyle={styles.txt} inputStyle={styles.inpt} initialValue={birthdayDate} handleChangeDate={handleChangeDate}/>
           <Input containerStyle={styles.input} textStyle={styles.txt} labelText={"Correu electrònic"} inputStyle={styles.inpt} initialValue={userMail} handleChange={handleChangeMail} />
           <Input containerStyle={styles.input} textStyle={styles.txt} labelText={"Contrassenya"} inputStyle={styles.inpt} initialValue={userPasswd} handleChange={handleChangePasswd} secure={true}/>
-          <View style={styles.submitbtn}><Button title="Registra't"/></View>
           
+          <NavigationButton stylesBtn={styles.btn} screenToNavigate={"InitialScreen"} text={"SEGÜENT"} styleText={styles.txtBtn}/>
         </View>
       </View>
     </SafeAreaView>
@@ -73,27 +73,22 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 10,
   },
-  submitbtn: {
-    position: "relative",
-    marginTop: 50,
-    alignSelf: "center",
-    width: windowWidth - 30,
-  },
   btn: {
-    backgroundColor: "#DBE9EC",
+    backgroundColor: "#FFFFFF",
     padding: 2,
-    width: 100,
+    width: 200,
+    height: 50,
     alignSelf: "center",
-    marginTop: 10,
-
+    marginTop: 40,
     borderColor: "#000000",
-    borderWidth: 2,
+    borderWidth: 3,
   },
 
   txtBtn: {
     fontWeight: "900",
-    fontSize: 14,
+    fontSize: 18,
     alignSelf: "center",
+    paddingTop: 8,
   },
 
   container: {
@@ -126,6 +121,8 @@ const styles = StyleSheet.create({
   inptPicker: {
     backgroundColor: "white",
     width: windowWidth - 30,
+    borderColor: "black",
+    borderWidth: 1
   },
 
   inpt: {
@@ -134,6 +131,10 @@ const styles = StyleSheet.create({
     width: windowWidth - 30,
     height: 50,
     color: "black",
+    borderColor: "black",
+    borderWidth: 2,
+    shadowOffset: {width: 0, height: -3},
+    shadowColor: "black"
   },
   txt: {
     margin: 2,

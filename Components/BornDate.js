@@ -3,6 +3,7 @@ import {
     View,
     TextInput,
     TouchableOpacity,
+    Button,
   } from "react-native";
 import {useState} from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -13,8 +14,6 @@ function BornDate({
     textStyle,
     inputStyle,
     initialValue,
-    btnStyle,
-    textBtnStyle,
     handleChangeDate
 }) {
 
@@ -28,9 +27,7 @@ function BornDate({
       editable={false}
       placeholder="Fes click aqui per afegir la teva data de naixement"
     />
-    <TouchableOpacity style={btnStyle} onPress={() => setOpen(true)}>
-      <Text style={textBtnStyle}>Cambiar data</Text>
-    </TouchableOpacity>
+    <View style={{margin: 10, width: 90, alignSelf: "center"}}><Button title="Cambiar" onPress={() => setOpen(true)}/></View>
     {open && (
       <DateTimePicker
         value={initialValue}
