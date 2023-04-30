@@ -10,26 +10,21 @@ import Header from "../Components/Header";
 import GenderPicker from "../Components/GenderPicker";
 import Input from "../Components/Input";
 import BornDate from "../Components/BornDate";
-import { NavigationButton } from "../Components/NavigationButton";
+import SubmitButton from "../Components/SubmitButton";
+import { setDataDB } from "../services/setDataDB";
 
 const windowWidth = Dimensions.get("window").width;
 
 function SignUp() {
+  const date = new Date()
   //Dades del usuari
   const [gender, setGender] = useState("");
   const [userName, setUserName] = useState("");
-  const [birthdayDate, setBirthdayDate] = useState(new Date());
+  const [birthdayDate, setBirthdayDate] = useState(date);
   const [userMail, setUserMail] = useState("");
   const [userPasswd, setUserPasswd] = useState("");
 
-  //Estats interns
-  const [open, setOpen] = useState(false);
-  const genderOptions = [
-    { label: "Sense especificar", value: "no_specify" },
-    { label: "Masculí", value: "masculi" },
-    { label: "Femení", value: "femeni" },
-    { label: "No binari", value: "no_binari" },
-  ];
+
 
   const handleChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || birthdayDate;
@@ -48,6 +43,21 @@ function SignUp() {
   const handleChangePasswd = (value) => {
     setUserPasswd(value)
   }
+  const handleSubmit = () => {
+    if(gender !== "Sense especificar" && userName !== "" && birthdayDate !== date && userMail !== "" && userPasswd!== "") {
+      formattedDate = `${birthdayDate.getDate()}/${birthdayDate.getMonth()+1}/${birthdayDate.getFullYear()}`
+      const newUser = {
+        name: userName,
+        mail: userMail,
+        passwd: userPasswd,
+        date: formattedDate,
+        gender: gender
+      }
+      console.log("Datos usuario", newUser)
+     
+      setDataDB("@USER_EXAMPLE",newUser).then(console.log("Registro realizado"))
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -60,7 +70,7 @@ function SignUp() {
           <Input containerStyle={styles.input} textStyle={styles.txt} labelText={"Correu electrònic"} inputStyle={styles.inpt} initialValue={userMail} handleChange={handleChangeMail} />
           <Input containerStyle={styles.input} textStyle={styles.txt} labelText={"Contrassenya"} inputStyle={styles.inpt} initialValue={userPasswd} handleChange={handleChangePasswd} secure={true}/>
           
-          <NavigationButton stylesBtn={styles.btn} screenToNavigate={"InitialScreen"} text={"SEGÜENT"} styleText={styles.txtBtn}/>
+          <SubmitButton text={"SEGÜENT"} handleSubmit={handleSubmit} screenToNavigate={"InitialScreen"}/>
         </View>
       </View>
     </SafeAreaView>

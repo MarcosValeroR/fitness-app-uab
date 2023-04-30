@@ -1,13 +1,14 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Input from "./Input";
-import { NavigationButton } from "./NavigationButton";
+import SubmitButton from "./SubmitButton";
 
 function LoginContainer({
   userMail,
   userPasswd,
   handleChangeMail,
   handleChangePasswd,
+  handleSubmit
 }) {
   return (
     <View style={styles.container}>
@@ -28,7 +29,7 @@ function LoginContainer({
         handleChange={handleChangePasswd}
         secure={true}
       />
-      <NavigationButton stylesBtn={styles.btn} screenToNavigate={"InitialScreen"} text={"INICIAR SESSIÓ"} styleText={styles.txtBtn}/>
+      <SubmitButton text={"SEGÜENT"} handleSubmit={handleSubmit} screenToNavigate={"InitialScreen"}/>
     </View>
   );
 }
