@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -11,12 +11,18 @@ import GenderPicker from "../Components/GenderPicker";
 import Input from "../Components/Input";
 import BornDate from "../Components/BornDate";
 import SubmitButton from "../Components/SubmitButton";
-import { setDataDB } from "../services/setDataDB";
+import {
+  loadLocalData,
+  getUsers,
+  storeUsers,
+  addUser,
+} from "../services/data-manager";
+import Globals from "../services/globals";
 
 const windowWidth = Dimensions.get("window").width;
 
 function SignUp() {
-  const date = new Date()
+  const date = new Date();
   //Dades del usuari
   const [gender, setGender] = useState("");
   const [userName, setUserName] = useState("");
@@ -24,7 +30,12 @@ function SignUp() {
   const [userMail, setUserMail] = useState("");
   const [userPasswd, setUserPasswd] = useState("");
 
-
+  useEffect(() => {
+    async function loadData() {
+      await loadLocalData();
+    }
+    loadData();
+  }, []);
 
   const handleChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || birthdayDate;
@@ -32,45 +43,89 @@ function SignUp() {
   };
 
   const handleGenderPicker = (value) => {
-    setGender(value)
-  }
+    setGender(value);
+  };
   const handleChangeName = (value) => {
-    setUserName(value)
-  }
+    setUserName(value);
+  };
   const handleChangeMail = (value) => {
-    setUserMail(value)
-  }
+    setUserMail(value);
+  };
   const handleChangePasswd = (value) => {
-    setUserPasswd(value)
-  }
+    setUserPasswd(value);
+  };
   const handleSubmit = () => {
-    if(gender !== "Sense especificar" && userName !== "" && birthdayDate !== date && userMail !== "" && userPasswd!== "") {
-      formattedDate = `${birthdayDate.getDate()}/${birthdayDate.getMonth()+1}/${birthdayDate.getFullYear()}`
+    if (
+      gender !== "Sense especificar" &&
+      userName !== "" &&
+      birthdayDate !== date &&
+      userMail !== "" &&
+      userPasswd !== ""
+    ) {
+      formattedDate = `${birthdayDate.getDate()}/${
+        birthdayDate.getMonth() + 1
+      }/${birthdayDate.getFullYear()}`;
       const newUser = {
         name: userName,
         mail: userMail,
         passwd: userPasswd,
         date: formattedDate,
-        gender: gender
-      }
-      console.log("Datos usuario", newUser)
-     
-      setDataDB("@USER_EXAMPLE",newUser).then(console.log("Registro realizado"))
+        gender: gender,
+      };
+      addUser(newUser);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header headerTitle={"REGISTRE NOU USUARI"}/>
+      <Header headerTitle={"REGISTRE NOU USUARI"} />
       <View style={styles.bodyScreen}>
         <View style={styles.form}>
-          <GenderPicker gender={gender} handleGenderPicker={handleGenderPicker} inputStyle={styles.input} textStyle={styles.txt} inputPickerStyle={styles.inptPicker}/>
-          <Input containerStyle={styles.input} textStyle={styles.txt} labelText={"Nom"} inputStyle={styles.inpt} initialValue={userName} handleChange={handleChangeName}/>
-          <BornDate containerStyle={styles.input} textStyle={styles.txt} inputStyle={styles.inpt} initialValue={birthdayDate} handleChangeDate={handleChangeDate}/>
-          <Input containerStyle={styles.input} textStyle={styles.txt} labelText={"Correu electrònic"} inputStyle={styles.inpt} initialValue={userMail} handleChange={handleChangeMail} />
-          <Input containerStyle={styles.input} textStyle={styles.txt} labelText={"Contrassenya"} inputStyle={styles.inpt} initialValue={userPasswd} handleChange={handleChangePasswd} secure={true}/>
-          
-          <SubmitButton text={"SEGÜENT"} handleSubmit={handleSubmit} screenToNavigate={"InitialScreen"}/>
+          <GenderPicker
+            gender={gender}
+            handleGenderPicker={handleGenderPicker}
+            inputStyle={styles.input}
+            textStyle={styles.txt}
+            inputPickerStyle={styles.inptPicker}
+          />
+          <Input
+            containerStyle={styles.input}
+            textStyle={styles.txt}
+            labelText={"Nom"}
+            inputStyle={styles.inpt}
+            initialValue={userName}
+            handleChange={handleChangeName}
+          />
+          <BornDate
+            containerStyle={styles.input}
+            textStyle={styles.txt}
+            inputStyle={styles.inpt}
+            initialValue={birthdayDate}
+            handleChangeDate={handleChangeDate}
+          />
+          <Input
+            containerStyle={styles.input}
+            textStyle={styles.txt}
+            labelText={"Correu electrònic"}
+            inputStyle={styles.inpt}
+            initialValue={userMail}
+            handleChange={handleChangeMail}
+          />
+          <Input
+            containerStyle={styles.input}
+            textStyle={styles.txt}
+            labelText={"Contrassenya"}
+            inputStyle={styles.inpt}
+            initialValue={userPasswd}
+            handleChange={handleChangePasswd}
+            secure={true}
+          />
+
+          <SubmitButton
+            text={"SEGÜENT"}
+            handleSubmit={handleSubmit}
+            screenToNavigate={"InitialScreen"}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -130,7 +185,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     width: windowWidth - 30,
     borderColor: "black",
-    borderWidth: 1
+    borderWidth: 1,
   },
 
   inpt: {
@@ -141,8 +196,8 @@ const styles = StyleSheet.create({
     color: "black",
     borderColor: "black",
     borderWidth: 2,
-    shadowOffset: {width: 0, height: -3},
-    shadowColor: "black"
+    shadowOffset: { width: 0, height: -3 },
+    shadowColor: "black",
   },
   txt: {
     margin: 2,

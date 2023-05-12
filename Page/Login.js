@@ -1,33 +1,52 @@
-import {useState} from "react";
-import {  StatusBar, StyleSheet, SafeAreaView } from "react-native";
+import { useState, useEffect } from "react";
+import { StatusBar, StyleSheet, SafeAreaView } from "react-native";
 import Header from "../Components/Header";
 import LoginContainer from "../Components/LoginContainer";
+import Globals from "../services/globals";
 import { useNavigation } from "@react-navigation/native";
-import { getDataDB } from "../services/getDataDB";
+import { searchUser, loadLocalData } from "../services/data-manager";
 
 function Login() {
+  const navigation = useNavigation();
+  const [userMail, setUserMail] = useState("");
+  const [userPasswd, setUserPasswd] = useState("");
 
-  const [userMail, setUserMail] = useState("")
-  const [userPasswd, setUserPasswd] = useState("")
+  useEffect(() => {
+    async function loadData() {
+      await loadLocalData();
+    }
+    loadData();
+  }, []);
 
   const handleChangeMail = (value) => {
-    setUserMail(value)
-  }
+    setUserMail(value);
+  };
   const handleChangePasswd = (value) => {
-    setUserPasswd(value)
-    
-  }
+    setUserPasswd(value);
+  };
   const handleSubmit = () => {
-    if (userMail !== "" && userPasswd !== ""){
-      getDataDB("@USER_EXAMPLE").then((data) => console.log(data))
+    if (userMail !== "" && userPasswd !== "") {
+      const userFound = searchUser(userMail, userPasswd);
+      console.log(userFound);
+      if (userFound !== "User not found") {
+        navigation.navigate("WelcomeScreen");
+      } else {
+        navigation.navigate("LoginScreen");
+      }
     } else {
-      console.log("Rellena todos los campos para acceder a tu usuario!")
+      console.log("Rellena todos los campos para acceder a tu usuario!");
     }
-  }
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <Header headerTitle={"INICI DE SESSIÓ"}/>
-      <LoginContainer userMail={userMail} userPasswd={userPasswd} handleChangeMail={handleChangeMail} handleChangePasswd={handleChangePasswd} handleSubmit={handleSubmit}/>
+      <Header headerTitle={"INICI DE SESSIÓ"} />
+      <LoginContainer
+        userMail={userMail}
+        userPasswd={userPasswd}
+        handleChangeMail={handleChangeMail}
+        handleChangePasswd={handleChangePasswd}
+        handleSubmit={handleSubmit}
+      />
     </SafeAreaView>
   );
 }

@@ -8,7 +8,8 @@ function LoginContainer({
   userPasswd,
   handleChangeMail,
   handleChangePasswd,
-  handleSubmit
+  handleSubmit,
+  screenToNavigate,
 }) {
   return (
     <View style={styles.container}>
@@ -29,7 +30,11 @@ function LoginContainer({
         handleChange={handleChangePasswd}
         secure={true}
       />
-      <SubmitButton text={"SEGÜENT"} handleSubmit={handleSubmit} screenToNavigate={"InitialScreen"}/>
+      <SubmitButton
+        text={"SEGÜENT"}
+        handleSubmit={handleSubmit}
+        screenToNavigate={screenToNavigate}
+      />
     </View>
   );
 }

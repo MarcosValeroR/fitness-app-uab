@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-function SubmitButton({ text, handleSubmit, screenToNavigate }) {
+function SubmitButton({ text, handleSubmit }) {
   const navigation = useNavigation();
 
   return (
@@ -9,7 +9,6 @@ function SubmitButton({ text, handleSubmit, screenToNavigate }) {
       style={styles.btn}
       onPress={() => {
         handleSubmit();
-        navigation.navigate(screenToNavigate);
       }}
     >
       <Text style={styles.txtBtn}>{text}</Text>
