@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   View,
   StyleSheet,
@@ -10,18 +11,21 @@ import Header from "../Components/Header";
 import GenderPicker from "../Components/GenderPicker";
 import Input from "../Components/Input";
 import BornDate from "../Components/BornDate";
-import SubmitButton from "../Components/SubmitButton";
+import SignUpButton from "../Components/SignUpButton";
+
 import {
   loadLocalData,
   getUsers,
   storeUsers,
   addUser,
+  clearData,
 } from "../services/data-manager";
 import Globals from "../services/globals";
 
 const windowWidth = Dimensions.get("window").width;
 
 function SignUp() {
+  const navigation = useNavigation();
   const date = new Date();
   //Dades del usuari
   const [gender, setGender] = useState("");
@@ -72,7 +76,7 @@ function SignUp() {
         date: formattedDate,
         gender: gender,
       };
-      addUser(newUser);
+      navigation.navigate("Signup2Screen", { data: newUser });
     }
   };
 
@@ -121,11 +125,7 @@ function SignUp() {
             secure={true}
           />
 
-          <SubmitButton
-            text={"SEGÜENT"}
-            handleSubmit={handleSubmit}
-            screenToNavigate={"InitialScreen"}
-          />
+          <SignUpButton text={"SEGÜENT"} handleSubmit={handleSubmit} />
         </View>
       </View>
     </SafeAreaView>

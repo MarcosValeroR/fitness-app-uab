@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Image, View } from "react-native";
 import { NavigationButton } from "../Components/NavigationButton";
+import { clearData } from "../services/local-storage";
 
 function InitialCard() {
+  useEffect(() => {
+    clearData();
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.initialCard}>
@@ -11,8 +15,18 @@ function InitialCard() {
           source={require("../assets/Images/portada-app.jpg")}
         />
         <View style={styles.containerBtns}>
-          <NavigationButton stylesBtn={styles.btn} screenToNavigate="SignupScreen" text="REGISTRA'T"styleText={styles.txtBtn} />
-          <NavigationButton stylesBtn={styles.btn} screenToNavigate="LoginScreen" text="INICIA SESSIÓ"styleText={styles.txtBtn} />
+          <NavigationButton
+            stylesBtn={styles.btn}
+            screenToNavigate="SignupScreen"
+            text="REGISTRA'T"
+            styleText={styles.txtBtn}
+          />
+          <NavigationButton
+            stylesBtn={styles.btn}
+            screenToNavigate="LoginScreen"
+            text="INICIA SESSIÓ"
+            styleText={styles.txtBtn}
+          />
         </View>
       </View>
     </View>

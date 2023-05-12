@@ -1,5 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+async function clearData() {
+  await AsyncStorage.clear();
+}
+
 const setLocalValue = async (key, value) => {
   try {
     await AsyncStorage.setItem(key, value);
@@ -34,4 +38,4 @@ const getLocalData = async (key) => {
   }
 };
 
-export { setLocalValue, setLocalData, getLocalValue, getLocalData };
+export { setLocalValue, setLocalData, getLocalValue, getLocalData, clearData };
