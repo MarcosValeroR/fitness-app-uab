@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { StyleSheet, Image, View } from "react-native";
 import { NavigationButton } from "../Components/NavigationButton";
-import { clearData } from "../services/local-storage";
+// import { clearData } from "../services/local-storage";
 
 function InitialCard() {
   useEffect(() => {
-    clearData();
+    //Clear data async storage
+    // clearData();
   }, []);
   return (
     <View style={styles.container}>

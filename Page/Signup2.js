@@ -52,7 +52,7 @@ function Signup2() {
         navigation.navigate("SignupScreen");
       } else {
         addUser(newUser);
-        navigation.navigate("InitialScreen");
+        navigation.navigate("WelcomeScreen", {data: newUser});
       }
     }
   };

@@ -27,9 +27,8 @@ function Login() {
   const handleSubmit = () => {
     if (userMail !== "" && userPasswd !== "") {
       const userFound = searchUser(userMail, userPasswd);
-      console.log(userFound);
       if (userFound !== "User not found") {
-        navigation.navigate("WelcomeScreen");
+        navigation.navigate("WelcomeScreen", { data: userFound });
       } else {
         navigation.navigate("LoginScreen");
       }

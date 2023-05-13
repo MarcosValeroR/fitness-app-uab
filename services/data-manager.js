@@ -34,13 +34,11 @@ const searchUser = (mail, passwd) => {
       Globals.users[user].mail === mail &&
       Globals.users[user].passwd === passwd
     ) {
-      console.log("Usuario existente");
+      console.log("User found");
       return Globals.users[user];
     }
   }
   return "User not found";
 };
-
-
 
 export { loadLocalData, getUsers, storeUsers, addUser, searchUser };
