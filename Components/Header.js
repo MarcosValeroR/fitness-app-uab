@@ -2,15 +2,16 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { NavigationIcon } from "../Components/NavigationIcon";
 
-function Header({ headerTitle, screenToNavigate = "InitialScreen" }) {
+function Header({ headerTitle, screenToNavigate = "InitialScreen" , isNavigationIcon = true}) {
   return (
     <View style={styles.headerScreen}>
-      <NavigationIcon
+      {isNavigationIcon && <NavigationIcon
         stylesIcon={styles.arrowLeft}
         screenToNavigate={screenToNavigate}
         size={35}
         iconName={"arrowleft"}
-      />
+      />}
+      {!isNavigationIcon && <View style={{marginLeft: 35}}></View>}
       <Text style={styles.txtTitle}>{headerTitle}</Text>
     </View>
   );

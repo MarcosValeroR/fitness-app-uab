@@ -37,7 +37,7 @@ function InitialCard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#A3B6C6",
+    backgroundColor: "#BDC6D0",
     alignItems: "center",
     justifyContent: "center",
   },

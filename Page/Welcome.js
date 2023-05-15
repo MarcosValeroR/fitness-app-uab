@@ -9,16 +9,12 @@ import {
 } from "react-native";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
-import { useRoute } from "@react-navigation/native";
 import Header from "../Components/Header";
 
 const windowWidth = Dimensions.get("window").width;
-
-function Welcome() {
-  const route = useRoute();
-
+function Welcome({ data }) {
   const [location, setLocation] = useState(null);
-  const [data, setData] = useState(route.params?.data ?? "default value");
+
   const { gender } = data;
 
   useEffect(() => {
@@ -33,15 +29,25 @@ function Welcome() {
       setLocation(location);
     })();
   }, []);
+
   const welcomeMessage = () => {
     return (
       <>
         {gender === "masculi" ? (
-          <Header headerTitle={`BENVINGUT ${data.name.toUpperCase()}!`} />
+          <Header
+            headerTitle={`BENVINGUT ${data.name.toUpperCase()}!`}
+            isNavigationIcon={false}
+          />
         ) : gender === "femeni" ? (
-          <Header headerTitle={`BENVINGUDA ${data.name.toUpperCase()}!`} />
+          <Header
+            headerTitle={`BENVINGUDA ${data.name.toUpperCase()}!`}
+            isNavigationIcon={false}
+          />
         ) : (
-          <Header headerTitle={`BENVINGUDE ${data.name.toUpperCase()}!`} />
+          <Header
+            headerTitle={`BENVINGUDE ${data.name.toUpperCase()}!`}
+            isNavigationIcon={false}
+          />
         )}
       </>
     );
@@ -49,8 +55,14 @@ function Welcome() {
   return (
     <SafeAreaView style={styles.container}>
       {welcomeMessage()}
+
       <View
-        style={{ height: 500, width: windowWidth}}
+        style={{
+          height: 400,
+          width: 350,
+          paddingTop: 30,
+          marginLeft: (windowWidth - 350) / 2,
+        }}
       >
         <View style={styles.containerMap}>
           {location && (
@@ -59,8 +71,8 @@ function Welcome() {
               region={{
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
-                latitudeDelta: 0.003,
-                longitudeDelta: 0.005,
+                latitudeDelta: 0.002,
+                longitudeDelta: 0.003,
               }}
               showsUserLocation={true}
             />
@@ -77,6 +89,8 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
+    borderColor: "black",
+    borderWidth: 1,
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -104,7 +118,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: "#A3B6C6",
+    backgroundColor: "#BDC6D0",
     paddingTop: StatusBar.currentHeight,
   },
   headerScreen: {
@@ -158,6 +172,17 @@ const styles = StyleSheet.create({
     flex: 10,
     width: "100%",
     alignItems: "center",
+  },
+  menu: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+  },
+  menuItem: {
+    color: "#fff",
+    fontSize: 12,
+    marginLeft: 10,
   },
 });
 

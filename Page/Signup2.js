@@ -52,7 +52,7 @@ function Signup2() {
         navigation.navigate("SignupScreen");
       } else {
         addUser(newUser);
-        navigation.navigate("WelcomeScreen", {data: newUser});
+        navigation.navigate("NavigationMenuScreen", { data: newUser });
       }
     }
   };
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: "#A3B6C6",
+    backgroundColor: "#BDC6D0",
     paddingTop: StatusBar.currentHeight,
   },
   headerScreen: {

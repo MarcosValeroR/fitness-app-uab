@@ -5,6 +5,7 @@ import SignUp from "./Page/Signup";
 import Login from "./Page/Login";
 import Welcome from "./Page/Welcome";
 import Signup2 from "./Page/Signup2";
+import NavigationMenu from "./Components/NavigationMenu";
 
 export default function Navigation() {
   const Stack = createNativeStackNavigator();
@@ -21,7 +22,7 @@ export default function Navigation() {
         <Stack.Screen name="Signup2Screen" component={Signup2} />
         <Stack.Screen name="InitialScreen" component={InitialCard} />
         <Stack.Screen name="LoginScreen" component={Login} />
-        <Stack.Screen name="WelcomeScreen" component={Welcome} />
+        <Stack.Screen name="NavigationMenuScreen" component={NavigationMenu} />
       </Stack.Navigator>
     </NavigationContainer>
   );

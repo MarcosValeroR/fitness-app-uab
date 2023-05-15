@@ -28,7 +28,7 @@ function Login() {
     if (userMail !== "" && userPasswd !== "") {
       const userFound = searchUser(userMail, userPasswd);
       if (userFound !== "User not found") {
-        navigation.navigate("WelcomeScreen", { data: userFound });
+        navigation.navigate("NavigationMenuScreen", { data: userFound });
       } else {
         navigation.navigate("LoginScreen");
       }
@@ -53,7 +53,7 @@ function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#A3B6C6",
+    backgroundColor: "#BDC6D0",
     paddingTop: StatusBar.currentHeight,
   },
 });
