@@ -48,7 +48,7 @@ const NavigationMenu = () => {
       <Tab.Screen
         styles={styles.menuItem}
         name="PERFIL"
-        component={Profile}
+        children={() => <Profile data={data} />}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

@@ -1,11 +1,33 @@
+import { useState } from "react";
 import { Text, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import Header from "../Components/Header";
+import CircularImage from "../Components/CircularImage";
+import * as ImagePicker from "expo-image-picker";
 
-const Profile = () => {
+const Profile = ({data}) => {
+  const [profileImage, setProfileImage] = useState(data.profileImage);
+
+  const handleClick = async () => {
+    permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      //L'usuari no li ha dat permis a les fotos
+      alert("Permission is required");
+      return;
+    }
+
+    const pickerResult = await ImagePicker.launchImageLibraryAsync();
+
+    if (pickerResult.canceled === true) {
+      return;
+    }
+
+    setProfileImage(pickerResult.assets[0].uri);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Header headerTitle={"PERFIL"} isNavigationIcon={false} />
-      <Text>Profile Screen</Text>
+      <CircularImage imagePath={profileImage} handlePress={handleClick} />
     </SafeAreaView>
   );
 };
