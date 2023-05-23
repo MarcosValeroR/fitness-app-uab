@@ -5,6 +5,7 @@ import Welcome from "../Page/Welcome";
 import Calendar from "../Page/Calendar";
 import Profile from "../Page/Profile";
 import { useRoute } from "@react-navigation/native";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Tab = createBottomTabNavigator();
 
@@ -13,7 +14,25 @@ const NavigationMenu = () => {
   const [data, setData] = useState(route.params?.data ?? "default value");
 
   return (
-    <Tab.Navigator styles={styles.menu}>
+    <Tab.Navigator
+      styles={styles.menu}
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
+          if (route.name === "INICI") {
+            iconName = focused ? "home" : "home-outline";
+          } else if (route.name === "REGISTRE") {
+            iconName = focused ? "barbell" : "barbell-outline";
+          } else if (route.name === "PERFIL") {
+            iconName = focused ? "person-circle" : "person-circle-outline";
+          }
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "blue",
+        tabBarInactiveTintColor: "gray",
+      })}
+    >
       <Tab.Screen
         styles={styles.menuItem}
         name="INICI"
@@ -22,7 +41,7 @@ const NavigationMenu = () => {
       />
       <Tab.Screen
         styles={styles.menuItem}
-        name="CALENDARI"
+        name="REGISTRE"
         component={Calendar}
         options={{ headerShown: false }}
       />
