@@ -13,7 +13,7 @@ const CircularImage = ({ imagePath, handlePress }) => {
       <View style={styles.circle}>
         {imagePath === null ? (
           <ImageBackground style={styles.img}>
-            <Text>Añade tu imagen</Text>
+            <Text>Afegeix una imatge</Text>
           </ImageBackground>
         ) : (
           <Image source={{uri: imagePath}} style={styles.img} />

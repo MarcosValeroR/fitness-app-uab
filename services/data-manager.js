@@ -27,7 +27,16 @@ const addUser = async (user) => {
   await storeUsers();
   console.log("Registre realitzat correctament");
 };
-
+const addImgUser = async (idUser, newData) => {
+  for (user in Globals.users) {
+    if (Globals.users[user].id === idUser) {
+      Globals.users[user].profileImage = newData;
+    } else {
+      console.log("User not found");
+    }
+  }
+  await storeUsers();
+};
 const searchUser = (mail, passwd) => {
   for (user in Globals.users) {
     if (
@@ -41,4 +50,4 @@ const searchUser = (mail, passwd) => {
   return "User not found";
 };
 
-export { loadLocalData, getUsers, storeUsers, addUser, searchUser };
+export { loadLocalData, getUsers, storeUsers, addUser, searchUser, addImgUser };
