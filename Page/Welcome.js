@@ -6,15 +6,49 @@ import {
   StatusBar,
   Dimensions,
   View,
+  TouchableOpacity,
 } from "react-native";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
 import Header from "../Components/Header";
+import TraineeComponent from "../Components/TraineeComponent";
 
 const windowWidth = Dimensions.get("window").width;
 function Welcome({ data }) {
   const [location, setLocation] = useState(null);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
+  const [startTrainee, setStartTrainee] = useState(false);
 
+  useEffect(() => {
+    if (seconds === 60) {
+      setSeconds(0);
+      setMinutes((m) => m + 1);
+    }
+  }, [seconds]);
+
+  const start = () => {
+    const id = setInterval(() => {
+      setSeconds((s) => s + 1);
+    }, 1000);
+    setStartTrainee(true);
+    setIntervalId(id);
+  };
+
+  const stop = () => {
+    clearInterval(intervalId);
+
+    //Despues de guardar los datos
+    setSeconds(0);
+    setMinutes(0);
+    setStartTrainee(false);
+    setIntervalId(null);
+  };
+
+  const formatTime = (time) => time.toString().padStart(2, "0");
+
+  const displayTime = `${formatTime(minutes)}:${formatTime(seconds)}`;
   const { gender } = data;
 
   useEffect(() => {
@@ -28,7 +62,7 @@ function Welcome({ data }) {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
-  }, []);
+  });
 
   const welcomeMessage = () => {
     return (
@@ -79,11 +113,61 @@ function Welcome({ data }) {
           )}
         </View>
       </View>
+      <View style={styles.containerBtns}>
+        <TouchableOpacity onPress={start}>
+          <View style={styles.btnStart}>
+            <Text style={styles.txtBtns}>INICIAR ENTRENAMENT</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={stop}>
+          <View style={styles.btnFinish}>
+            <Text style={styles.txtBtns}>FINALITZAR</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      {startTrainee && <TraineeComponent displayTime={displayTime} />}
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  containerBtns: {
+    width: "100%",
+    height: "auto",
+    alignItems: "center",
+    paddingTop: 15,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  btnStart: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    borderColor: "black",
+    borderWidth: 1,
+    width: 160,
+    height: 40,
+    backgroundColor: "blue",
+    alignItems: "center",
+    alignContent: "center",
+  },
+  txtBtns: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "white",
+  },
+  btnFinish: {
+    borderColor: "black",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    borderWidth: 1,
+    height: 40,
+    width: 150,
+    backgroundColor: "red",
+    alignItems: "center",
+  },
   containerMap: {
     height: "100%",
     width: "100%",
@@ -95,94 +179,10 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
-  input: {
-    marginBottom: 10,
-  },
-  btn: {
-    backgroundColor: "#FFFFFF",
-    padding: 2,
-    width: 200,
-    height: 50,
-    alignSelf: "center",
-    marginTop: 40,
-    borderColor: "#000000",
-    borderWidth: 3,
-  },
-
-  txtBtn: {
-    fontWeight: "900",
-    fontSize: 18,
-    alignSelf: "center",
-    paddingTop: 8,
-  },
-
   container: {
     flex: 1,
     backgroundColor: "#BDC6D0",
     paddingTop: StatusBar.currentHeight,
-  },
-  headerScreen: {
-    flex: 0.8,
-    flexDirection: "row",
-    paddingBottom: 10,
-    borderBottomColor: "black",
-    borderBottomWidth: 4,
-    alignItems: "center",
-  },
-
-  arrowLeft: {
-    marginTop: 12,
-    width: "100%",
-  },
-
-  txtTitle: {
-    fontSize: 24,
-    marginTop: 10,
-    fontWeight: "900",
-    width: "80%",
-    textAlign: "center",
-  },
-
-  inptPicker: {
-    backgroundColor: "#FFFFFF",
-    width: windowWidth - 30,
-    borderColor: "black",
-    borderWidth: 1,
-  },
-
-  inpt: {
-    padding: 10,
-    backgroundColor: "#FFFFFF",
-    width: windowWidth - 30,
-    height: 50,
-    color: "black",
-    borderColor: "black",
-    borderWidth: 2,
-    shadowOffset: { width: 0, height: -3 },
-    shadowColor: "black",
-  },
-  txt: {
-    margin: 2,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-
-  bodyScreen: {
-    marginTop: 20,
-    flex: 10,
-    width: "100%",
-    alignItems: "center",
-  },
-  menu: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-  },
-  menuItem: {
-    color: "#fff",
-    fontSize: 12,
-    marginLeft: 10,
   },
 });
 
