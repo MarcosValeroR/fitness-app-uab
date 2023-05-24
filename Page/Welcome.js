@@ -8,7 +8,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import MapView from "react-native-maps";
+import MapView, { Polyline } from "react-native-maps";
 import * as Location from "expo-location";
 import Header from "../Components/Header";
 import TraineeComponent from "../Components/TraineeComponent";
@@ -16,6 +16,7 @@ import TraineeComponent from "../Components/TraineeComponent";
 const windowWidth = Dimensions.get("window").width;
 function Welcome({ data }) {
   const [location, setLocation] = useState(null);
+  const [route, setRoute] = useState([]);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
@@ -35,7 +36,6 @@ function Welcome({ data }) {
     setStartTrainee(true);
     setIntervalId(id);
   };
-
   const stop = () => {
     clearInterval(intervalId);
 
@@ -45,10 +45,15 @@ function Welcome({ data }) {
     setStartTrainee(false);
     setIntervalId(null);
   };
-
   const formatTime = (time) => time.toString().padStart(2, "0");
-
   const displayTime = `${formatTime(minutes)}:${formatTime(seconds)}`;
+
+  const onRegionChangeComplete = (region) => {
+    const { latitude, longitude } = region;
+    const newCoordinate = { latitude, longitude };
+    setRoute([...route, newCoordinate]);
+  };
+
   const { gender } = data;
 
   useEffect(() => {
@@ -108,8 +113,14 @@ function Welcome({ data }) {
                 latitudeDelta: 0.002,
                 longitudeDelta: 0.003,
               }}
+              onRegionChangeComplete={onRegionChangeComplete}
               showsUserLocation={true}
-            />
+              followsUserLocation={true}
+              userLocationPriority="HIGH_ACCURACY"
+              //Mirar prop onUserLocationChange, quiza se puede substituir por on regionChangeComplete
+            >
+              <Polyline coordinates={route} strokeWidth={2} strokeColor="red" />
+            </MapView>
           )}
         </View>
       </View>
