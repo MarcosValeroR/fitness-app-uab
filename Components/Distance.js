@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
 
-const Distance = () => {
+const Distance = ({ distance }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.txt}>Distància (km)</Text>
-      <Text style={styles.txt}>20.2</Text>
+      <Text style={styles.txt}>{distance}</Text>
     </View>
   );
 };

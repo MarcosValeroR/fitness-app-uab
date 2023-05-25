@@ -4,13 +4,13 @@ import Counter from "./Counter";
 import Distance from "./Distance";
 import Speed from "./Speed";
 
-const TraineeComponent = ({ displayTime }) => {
+const TraineeComponent = ({ displayTime, distance }) => {
   return (
     <>
       <View style={styles.container}>
         <Counter displayTime={displayTime} />
         <View style={styles.separator} />
-        <Distance />
+        <Distance distance={distance} />
         <View style={styles.separator} />
         <Speed />
       </View>

@@ -8,18 +8,48 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import MapView, { Polyline } from "react-native-maps";
+import MapView, {
+  Marker,
+  AnimatedRegion,
+  Polyline,
+  PROVIDER_GOOGLE,
+} from "react-native-maps";
 import * as Location from "expo-location";
+import haversine from "haversine";
 import Header from "../Components/Header";
 import TraineeComponent from "../Components/TraineeComponent";
+import { getDistance } from "geolib";
 
 const windowWidth = Dimensions.get("window").width;
+const LONGITUDEDELTA = 0.003;
+const LATITUDEDELTA = 0.002;
+const LONGITUDE = -122.4324;
+const LATITUDE = 37.78825;
+
 function Welcome({ data }) {
+  //Estados Map
   const [location, setLocation] = useState(null);
-  const [route, setRoute] = useState([]);
+  const [routeCoordinates, setRouteCoordinates] = useState([]);
+  const [latitude, setLatitude] = useState(LATITUDE);
+  const [longitude, setLongitude] = useState(LONGITUDE);
+  const [distance, setDistance] = useState(0);
+  const [prevLatLng, setPrevLatLng] = useState({});
+  const [coordinate, setCoordinate] = useState(
+    new AnimatedRegion({
+      latitude: LATITUDE,
+      longitude: LONGITUDE,
+      latitudeDelta: LATITUDEDELTA,
+      longitudeDelta: LONGITUDEDELTA,
+    })
+  );
+  const [marker, setMarker] = useState(null);
+
+  //Estados Counter
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [intervalId, setIntervalId] = useState(null);
+
+  //Estados entrenamiento
   const [startTrainee, setStartTrainee] = useState(false);
 
   useEffect(() => {
@@ -48,27 +78,63 @@ function Welcome({ data }) {
   const formatTime = (time) => time.toString().padStart(2, "0");
   const displayTime = `${formatTime(minutes)}:${formatTime(seconds)}`;
 
-  const onRegionChangeComplete = (region) => {
-    const { latitude, longitude } = region;
-    const newCoordinate = { latitude, longitude };
-    setRoute([...route, newCoordinate]);
-  };
-
   const { gender } = data;
 
   useEffect(() => {
-    (async () => {
+    const startTracking = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.error("Permission to access location was denied");
+        alert("Permisos para acceder a la ubicación denegados");
         return;
       }
+      try {
+        const id = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.Lowest,
+            timeInterval: 5000,
+            distanceInterval: 10,
+          },
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            const newCoordinate = {
+              latitude,
+              longitude,
+            };
+            if (marker !== null) {
+              marker.animateMarkerToCoordinate(newCoordinate, 500);
+            }
+            setLatitude(latitude);
+            setLongitude(longitude);
+            setRouteCoordinates([...routeCoordinates, newCoordinate]);
+            setDistance((distance) => distance + calcdistance(newCoordinate));
+            setPrevLatLng(newCoordinate);
+          }
+        );
+      } catch (err) {
+        console.log("Algo salió mal....");
+      }
+    };
+    startTracking();
+  }, [latitude, longitude]);
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-    })();
+  const calcdistance = (newLatLng) => {
+    //OPTAR POR CALCULAR EN REGISTRO CON UN INITIAL POINT Y UN FINAL POINT
+    if (Object.keys(prevLatLng).length === 0) {
+      return 0;
+    }
+    var pdis = getDistance(
+      { latitude: prevLatLng.latitude, longitude: prevLatLng.longitude },
+      { latitude: newLatLng.latitude, longitude: newLatLng.longitude }
+    );
+    return pdis / 1000;
+  };
+
+  const getMapRegion = () => ({
+    latitude: latitude,
+    longitude: longitude,
+    latitudeDelta: LATITUDEDELTA,
+    longitudeDelta: LONGITUDEDELTA,
   });
-
   const welcomeMessage = () => {
     return (
       <>
@@ -104,24 +170,28 @@ function Welcome({ data }) {
         }}
       >
         <View style={styles.containerMap}>
-          {location && (
-            <MapView
-              style={styles.map}
-              region={{
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: 0.002,
-                longitudeDelta: 0.003,
+          <MapView
+            style={styles.map}
+            region={getMapRegion()}
+            provider={PROVIDER_GOOGLE}
+            showsUserLocation
+            followsUserLocation
+            loadingEnabled
+          >
+            {startTrainee && routeCoordinates.length > 0 && (
+              <Polyline
+                coordinates={routeCoordinates}
+                strokeWidth={2}
+                strokeColor="red"
+              />
+            )}
+            <Marker.Animated
+              ref={(marker) => {
+                setMarker(marker);
               }}
-              onRegionChangeComplete={onRegionChangeComplete}
-              showsUserLocation={true}
-              followsUserLocation={true}
-              userLocationPriority="HIGH_ACCURACY"
-              //Mirar prop onUserLocationChange, quiza se puede substituir por on regionChangeComplete
-            >
-              <Polyline coordinates={route} strokeWidth={2} strokeColor="red" />
-            </MapView>
-          )}
+              coordinate={coordinate}
+            />
+          </MapView>
         </View>
       </View>
       <View style={styles.containerBtns}>
@@ -136,7 +206,9 @@ function Welcome({ data }) {
           </View>
         </TouchableOpacity>
       </View>
-      {startTrainee && <TraineeComponent displayTime={displayTime} />}
+      {startTrainee && (
+        <TraineeComponent displayTime={displayTime} distance={distance} />
+      )}
     </SafeAreaView>
   );
 }
