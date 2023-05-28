@@ -106,7 +106,6 @@ function Welcome({ data }) {
             setLatitude(latitude);
             setLongitude(longitude);
             setRouteCoordinates([...routeCoordinates, newCoordinate]);
-            setDistance((distance) => distance + calcdistance(newCoordinate));
             setPrevLatLng(newCoordinate);
           }
         );
