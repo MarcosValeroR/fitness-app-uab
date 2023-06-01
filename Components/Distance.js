@@ -4,7 +4,7 @@ const Distance = ({ distance }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.txt}>Distància (km)</Text>
-      <Text style={styles.txt}>{distance}</Text>
+      <Text style={styles.txt}>{distance.toFixed(2)}</Text>
     </View>
   );
 };

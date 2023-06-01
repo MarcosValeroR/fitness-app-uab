@@ -1,10 +1,10 @@
 import { View, Text, StyleSheet } from "react-native";
 
-const Speed = () => {
+const Speed = ({ speed}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.txt}>Velocitat(km/h)</Text>
-      <Text style={styles.txt}>20.2</Text>
+      <Text style={styles.txt}>Velocitat (m/s)</Text>
+      <Text style={styles.txt}>{speed.toFixed(1)}</Text>
     </View>
   );
 };

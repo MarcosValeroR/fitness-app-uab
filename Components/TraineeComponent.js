@@ -1,10 +1,10 @@
 import { Text, StyleSheet, View, Button } from "react-native";
 import React, { useEffect, useState } from "react";
 import Counter from "./Counter";
-import Distance from "./Distance";
 import Speed from "./Speed";
+import Distance from "./Distance";
 
-const TraineeComponent = ({ displayTime, distance }) => {
+const TraineeComponent = ({ displayTime, distance, speed }) => {
   return (
     <>
       <View style={styles.container}>
@@ -12,7 +12,7 @@ const TraineeComponent = ({ displayTime, distance }) => {
         <View style={styles.separator} />
         <Distance distance={distance} />
         <View style={styles.separator} />
-        <Speed />
+        <Speed speed={speed} />
       </View>
     </>
   );
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     height: 80,
     width: "90%",
-    paddingLeft: 15,
+    paddingLeft: 10,
     borderWidth: 2,
     borderColor: "black",
     backgroundColor: "white",

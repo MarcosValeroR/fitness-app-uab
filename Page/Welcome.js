@@ -8,41 +8,31 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import MapView, {
-  Marker,
-  AnimatedRegion,
-  Polyline,
-  PROVIDER_GOOGLE,
-} from "react-native-maps";
+import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import haversine from "haversine";
 import Header from "../Components/Header";
 import TraineeComponent from "../Components/TraineeComponent";
-import { getDistance } from "geolib";
-
+0;
 const windowWidth = Dimensions.get("window").width;
-const LONGITUDEDELTA = 0.003;
-const LATITUDEDELTA = 0.002;
+const LONGITUDEDELTA = 0.0113;
+const LATITUDEDELTA = 0.0112;
 const LONGITUDE = -122.4324;
 const LATITUDE = 37.78825;
 
 function Welcome({ data }) {
   //Estados Map
-  const [location, setLocation] = useState(null);
+
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [latitude, setLatitude] = useState(LATITUDE);
   const [longitude, setLongitude] = useState(LONGITUDE);
+
+  //Distancia
   const [distance, setDistance] = useState(0);
-  const [prevLatLng, setPrevLatLng] = useState({});
-  const [coordinate, setCoordinate] = useState(
-    new AnimatedRegion({
-      latitude: LATITUDE,
-      longitude: LONGITUDE,
-      latitudeDelta: LATITUDEDELTA,
-      longitudeDelta: LONGITUDEDELTA,
-    })
-  );
-  const [marker, setMarker] = useState(null);
+
+  //Velocitat
+  const [speed, setSpeed] = useState(0);
+  const [startTime, setStartTime] = useState(null);
 
   //Estados Counter
   const [minutes, setMinutes] = useState(0);
@@ -58,12 +48,42 @@ function Welcome({ data }) {
       setMinutes((m) => m + 1);
     }
   }, [seconds]);
+  useEffect(() => {
+    // console.log(routeCoordinates[routeCoordinates.length - 1]);
+    if (routeCoordinates.length === 0) {
+      console.log("No te mueves");
+    } else if (routeCoordinates.length === 1) {
+      setDistance(
+        (distance) =>
+          distance +
+          calcdistance(
+            routeCoordinates[routeCoordinates.length - 1],
+            routeCoordinates[routeCoordinates.length - 1]
+          )
+      );
+    } else {
+      setDistance(
+        (distance) =>
+          distance +
+          calcdistance(
+            routeCoordinates[routeCoordinates.length - 2],
+            routeCoordinates[routeCoordinates.length - 1]
+          )
+      );
+    }
+  }, [routeCoordinates]);
+
+  useEffect(() => {
+    const timeElapsed = Date.now() - startTime;
+    setSpeed((distance * 1000) / (timeElapsed / 1000));
+  }, [distance]);
 
   const start = () => {
     const id = setInterval(() => {
       setSeconds((s) => s + 1);
     }, 1000);
     setStartTrainee(true);
+    setStartTime(Date.now());
     setIntervalId(id);
   };
   const stop = () => {
@@ -88,10 +108,10 @@ function Welcome({ data }) {
         return;
       }
       try {
-        const id = await Location.watchPositionAsync(
+        await Location.watchPositionAsync(
           {
-            accuracy: Location.Accuracy.Lowest,
-            timeInterval: 5000,
+            accuracy: Location.Accuracy.High,
+            timeInterval: 1000,
             distanceInterval: 10,
           },
           (position) => {
@@ -100,13 +120,10 @@ function Welcome({ data }) {
               latitude,
               longitude,
             };
-            if (marker !== null) {
-              marker.animateMarkerToCoordinate(newCoordinate, 500);
-            }
+
             setLatitude(latitude);
             setLongitude(longitude);
-            setRouteCoordinates([...routeCoordinates, newCoordinate]);
-            setPrevLatLng(newCoordinate);
+            setRouteCoordinates((array) => array.concat(newCoordinate));
           }
         );
       } catch (err) {
@@ -114,20 +131,11 @@ function Welcome({ data }) {
       }
     };
     startTracking();
-  }, [latitude, longitude]);
+  }, []);
 
-  const calcdistance = (newLatLng) => {
-    //OPTAR POR CALCULAR EN REGISTRO CON UN INITIAL POINT Y UN FINAL POINT
-    if (Object.keys(prevLatLng).length === 0) {
-      return 0;
-    }
-    var pdis = getDistance(
-      { latitude: prevLatLng.latitude, longitude: prevLatLng.longitude },
-      { latitude: newLatLng.latitude, longitude: newLatLng.longitude }
-    );
-    return pdis / 1000;
+  const calcdistance = (previousLatlng, newLatLng) => {
+    return haversine(previousLatlng, newLatLng) || 0;
   };
-
   const getMapRegion = () => ({
     latitude: latitude,
     longitude: longitude,
@@ -177,36 +185,37 @@ function Welcome({ data }) {
             followsUserLocation
             loadingEnabled
           >
-            {startTrainee && routeCoordinates.length > 0 && (
+            {startTrainee && (
               <Polyline
                 coordinates={routeCoordinates}
                 strokeWidth={2}
                 strokeColor="red"
               />
             )}
-            <Marker.Animated
-              ref={(marker) => {
-                setMarker(marker);
-              }}
-              coordinate={coordinate}
-            />
           </MapView>
         </View>
       </View>
       <View style={styles.containerBtns}>
-        <TouchableOpacity onPress={start}>
-          <View style={styles.btnStart}>
-            <Text style={styles.txtBtns}>INICIAR ENTRENAMENT</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={stop}>
-          <View style={styles.btnFinish}>
-            <Text style={styles.txtBtns}>FINALITZAR</Text>
-          </View>
-        </TouchableOpacity>
+        {!startTrainee ? (
+          <TouchableOpacity onPress={start}>
+            <View style={styles.btnStart}>
+              <Text style={styles.txtBtns}>INICIAR ENTRENAMENT</Text>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={stop}>
+            <View style={styles.btnFinish}>
+              <Text style={styles.txtBtns}>FINALITZAR</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
       {startTrainee && (
-        <TraineeComponent displayTime={displayTime} distance={distance} />
+        <TraineeComponent
+          displayTime={displayTime}
+          distance={distance}
+          speed={speed}
+        />
       )}
     </SafeAreaView>
   );
