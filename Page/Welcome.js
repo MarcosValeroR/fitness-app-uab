@@ -42,16 +42,17 @@ function Welcome({ data }) {
   //Estados entrenamiento
   const [startTrainee, setStartTrainee] = useState(false);
 
+  //UseEffects
   useEffect(() => {
     if (seconds === 60) {
       setSeconds(0);
       setMinutes((m) => m + 1);
     }
   }, [seconds]);
+
   useEffect(() => {
     // console.log(routeCoordinates[routeCoordinates.length - 1]);
     if (routeCoordinates.length === 0) {
-      console.log("No te mueves");
     } else if (routeCoordinates.length === 1) {
       setDistance(
         (distance) =>
@@ -77,28 +78,6 @@ function Welcome({ data }) {
     const timeElapsed = Date.now() - startTime;
     setSpeed((distance * 1000) / (timeElapsed / 1000));
   }, [distance]);
-
-  const start = () => {
-    const id = setInterval(() => {
-      setSeconds((s) => s + 1);
-    }, 1000);
-    setStartTrainee(true);
-    setStartTime(Date.now());
-    setIntervalId(id);
-  };
-  const stop = () => {
-    clearInterval(intervalId);
-
-    //Despues de guardar los datos
-    setSeconds(0);
-    setMinutes(0);
-    setStartTrainee(false);
-    setIntervalId(null);
-  };
-  const formatTime = (time) => time.toString().padStart(2, "0");
-  const displayTime = `${formatTime(minutes)}:${formatTime(seconds)}`;
-
-  const { gender } = data;
 
   useEffect(() => {
     const startTracking = async () => {
@@ -132,6 +111,33 @@ function Welcome({ data }) {
     };
     startTracking();
   }, []);
+
+  useEffect(() => {
+    setSeconds(0);
+    setMinutes(0);
+    setDistance(0);
+    setSpeed(0);
+    setRouteCoordinates([]);
+  }, [startTrainee]);
+  const start = () => {
+    const id = setInterval(() => {
+      setSeconds((s) => s + 1);
+    }, 1000);
+    setStartTrainee(true);
+    setStartTime(Date.now());
+    setIntervalId(id);
+  };
+  const stop = () => {
+    clearInterval(intervalId);
+
+    //Despues de guardar los datos
+    setIntervalId(null);
+    setStartTrainee(false);
+  };
+  const formatTime = (time) => time.toString().padStart(2, "0");
+  const displayTime = `${formatTime(minutes)}:${formatTime(seconds)}`;
+
+  const { gender } = data;
 
   const calcdistance = (previousLatlng, newLatLng) => {
     return haversine(previousLatlng, newLatLng) || 0;
