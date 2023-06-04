@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Welcome from "../Page/Welcome";
-import Calendar from "../Page/Calendar";
+import Register from "../Page/Register";
 import Profile from "../Page/Profile";
 import { useRoute } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 const NavigationMenu = () => {
   const route = useRoute();
   const [data, setData] = useState(route.params?.data ?? "default value");
-  const handleNewTrainee = (userId,trainee) => {
+  const handleNewTrainee = (userId, trainee) => {
     addTrainee(data.id, trainee);
   };
   return (
@@ -47,7 +47,7 @@ const NavigationMenu = () => {
       <Tab.Screen
         styles={styles.menuItem}
         name="REGISTRE"
-        children={() => <Calendar data={data} />}
+        children={() => <Register />}
         options={{ headerShown: false }}
       />
       <Tab.Screen
