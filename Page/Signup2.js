@@ -45,7 +45,8 @@ function Signup2() {
         weight: weight,
         height: height,
         imc: imc,
-        profileImage: null
+        profileImage: null,
+        trainees: [],
       };
       const userExist = searchUser(newUser.mail, newUser.passwd);
       if (userExist !== "User not found") {

@@ -6,13 +6,16 @@ import Calendar from "../Page/Calendar";
 import Profile from "../Page/Profile";
 import { useRoute } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { addTrainee } from "../services/data-manager";
 
 const Tab = createBottomTabNavigator();
 
 const NavigationMenu = () => {
   const route = useRoute();
   const [data, setData] = useState(route.params?.data ?? "default value");
-
+  const handleNewTrainee = (userId,trainee) => {
+    addTrainee(data.id, trainee);
+  };
   return (
     <Tab.Navigator
       styles={styles.menu}
@@ -36,13 +39,15 @@ const NavigationMenu = () => {
       <Tab.Screen
         styles={styles.menuItem}
         name="INICI"
-        children={() => <Welcome data={data} />}
+        children={() => (
+          <Welcome data={data} handlenewTrainee={handleNewTrainee} />
+        )}
         options={{ headerShown: false }}
       />
       <Tab.Screen
         styles={styles.menuItem}
         name="REGISTRE"
-        component={Calendar}
+        children={() => <Calendar data={data} />}
         options={{ headerShown: false }}
       />
       <Tab.Screen

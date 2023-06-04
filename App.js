@@ -1,9 +1,8 @@
-import { SafeAreaView, StyleSheet } from "react-native"
-import Navigation from "./Navigation"
+import { SafeAreaView, StyleSheet } from "react-native";
+import Navigation from "./Navigation";
+import { clearData } from "./services/local-storage";
 
 export default function App() {
-    return (
-        <Navigation />
-    )
+//   clearData();
+  return <Navigation />;
 }
-

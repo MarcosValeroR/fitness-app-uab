@@ -1,5 +1,6 @@
 import { Text, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import Header from "../Components/Header";
+import React from "react";
 
 const Calendar = () => {
   return (

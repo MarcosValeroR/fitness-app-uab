@@ -13,7 +13,7 @@ import * as Location from "expo-location";
 import haversine from "haversine";
 import Header from "../Components/Header";
 import TraineeComponent from "../Components/TraineeComponent";
-0;
+
 const windowWidth = Dimensions.get("window").width;
 const LONGITUDEDELTA = 0.0113;
 const LATITUDEDELTA = 0.0112;
@@ -22,7 +22,6 @@ const LATITUDE = 37.78825;
 
 function Welcome({ data }) {
   //Estados Map
-
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [latitude, setLatitude] = useState(LATITUDE);
   const [longitude, setLongitude] = useState(LONGITUDE);
@@ -31,7 +30,7 @@ function Welcome({ data }) {
   const [distance, setDistance] = useState(0);
 
   //Velocitat
-  const [speed, setSpeed] = useState(0);
+  const [speed, setSpeed] = useState([]);
   const [startTime, setStartTime] = useState(null);
 
   //Estados Counter
@@ -51,7 +50,7 @@ function Welcome({ data }) {
   }, [seconds]);
 
   useEffect(() => {
-    // console.log(routeCoordinates[routeCoordinates.length - 1]);
+
     if (routeCoordinates.length === 0) {
     } else if (routeCoordinates.length === 1) {
       setDistance(
@@ -76,7 +75,8 @@ function Welcome({ data }) {
 
   useEffect(() => {
     const timeElapsed = Date.now() - startTime;
-    setSpeed((distance * 1000) / (timeElapsed / 1000));
+    const newSpeed = (distance * 1000) / (timeElapsed / 1000);
+    setSpeed((speed) => speed.concat(newSpeed));
   }, [distance]);
 
   useEffect(() => {
@@ -116,9 +116,10 @@ function Welcome({ data }) {
     setSeconds(0);
     setMinutes(0);
     setDistance(0);
-    setSpeed(0);
+    setSpeed([]);
     setRouteCoordinates([]);
   }, [startTrainee]);
+
   const start = () => {
     const id = setInterval(() => {
       setSeconds((s) => s + 1);
@@ -127,6 +128,7 @@ function Welcome({ data }) {
     setStartTime(Date.now());
     setIntervalId(id);
   };
+
   const stop = () => {
     clearInterval(intervalId);
 
@@ -134,6 +136,7 @@ function Welcome({ data }) {
     setIntervalId(null);
     setStartTrainee(false);
   };
+  
   const formatTime = (time) => time.toString().padStart(2, "0");
   const displayTime = `${formatTime(minutes)}:${formatTime(seconds)}`;
 
@@ -220,7 +223,9 @@ function Welcome({ data }) {
         <TraineeComponent
           displayTime={displayTime}
           distance={distance}
-          speed={speed}
+          speed={
+            speed[speed.length - 1] === undefined ? 0 : speed[speed.length - 1]
+          }
         />
       )}
     </SafeAreaView>

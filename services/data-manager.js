@@ -37,6 +37,7 @@ const addImgUser = async (idUser, newData) => {
   }
   await storeUsers();
 };
+
 const searchUser = (mail, passwd) => {
   for (user in Globals.users) {
     if (
