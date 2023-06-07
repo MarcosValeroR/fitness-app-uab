@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Welcome from "../Page/Welcome";
@@ -6,16 +6,33 @@ import Register from "../Page/Register";
 import Profile from "../Page/Profile";
 import { useRoute } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { addTrainee } from "../services/data-manager";
+import { editUser } from "../services/data-manager";
 
 const Tab = createBottomTabNavigator();
 
 const NavigationMenu = () => {
   const route = useRoute();
   const [data, setData] = useState(route.params?.data ?? "default value");
-  const handleNewTrainee = (userId, trainee) => {
-    addTrainee(data.id, trainee);
+
+  useEffect(() => {
+    console.log("DATOS", data);
+  }, [data]);
+
+  const handleEdit = (dataEdited) => {
+    setData({
+      ...data,
+      name: dataEdited.userName,
+      mail: dataEdited.mail,
+      passwd: dataEdited.passwd,
+      height: dataEdited.height,
+      weight: dataEdited.weight,
+    });
+    editUser(data.id,dataEdited)
   };
+  
+  const handleTrainees = (trainee) => {
+    
+  }
   return (
     <Tab.Navigator
       styles={styles.menu}
@@ -39,9 +56,7 @@ const NavigationMenu = () => {
       <Tab.Screen
         styles={styles.menuItem}
         name="INICI"
-        children={() => (
-          <Welcome data={data} handlenewTrainee={handleNewTrainee} />
-        )}
+        children={() => <Welcome data={data} handleTrainees={handleTrainees}/>}
         options={{ headerShown: false }}
       />
       <Tab.Screen
@@ -53,7 +68,7 @@ const NavigationMenu = () => {
       <Tab.Screen
         styles={styles.menuItem}
         name="PERFIL"
-        children={() => <Profile data={data} />}
+        children={() => <Profile data={data} handleEdit={handleEdit} />}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>

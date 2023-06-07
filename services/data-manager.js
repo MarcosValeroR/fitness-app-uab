@@ -37,7 +37,19 @@ const addImgUser = async (idUser, newData) => {
   }
   await storeUsers();
 };
+const editUser = async (id, newData) => {
+  console.log("Datos editados", newData);
+  Globals.users[id - 1] = {
+    ...Globals.users[id - 1],
+    mail: newData.mail,
+    name: newData.userName,
+    passwd: newData.passwd,
+    weight: newData.weight,
+    height: newData.height,
+  };
 
+  await storeUsers();
+};
 const searchUser = (mail, passwd) => {
   for (user in Globals.users) {
     if (
@@ -51,4 +63,12 @@ const searchUser = (mail, passwd) => {
   return "User not found";
 };
 
-export { loadLocalData, getUsers, storeUsers, addUser, searchUser, addImgUser };
+export {
+  loadLocalData,
+  getUsers,
+  storeUsers,
+  addUser,
+  searchUser,
+  addImgUser,
+  editUser,
+};
