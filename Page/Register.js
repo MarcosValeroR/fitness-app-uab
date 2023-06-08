@@ -16,9 +16,16 @@ const Register = ({ data }) => {
       <Header headerTitle={"REGISTRE"} isNavigationIcon={false} />
       <View style={styles.traineesContainer}>
         <ScrollView>
-          {data.trainees.map((trainee, index) => {
-            return <Trainee key={index} trainee={trainee} />;
-          })}
+          {data.trainees.length === 0 ? (
+            <Text>
+              No tens cap entrenament. Ves a la pantalla d'inici i comença el
+              teu entrament!
+            </Text>
+          ) : (
+            data.trainees.map((trainee, index) => {
+              return <Trainee key={index} trainee={trainee} />;
+            })
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>
