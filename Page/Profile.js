@@ -52,7 +52,15 @@ const Profile = ({ data, handleEdit }) => {
 
     setProfileImage(pickerResult.assets[0].uri);
   };
-
+  useEffect(() => {
+    calculateImc();
+  }, [weight, height]);
+  const calculateImc = () => {
+    const weightInKg = parseFloat(weight);
+    const heightInM = parseFloat(height) / 100;
+    const imcValue = weightInKg / (heightInM * heightInM);
+    setImc(imcValue.toFixed(2));
+  };
   const handleChangeMail = (value) => {
     setMail(value);
   };

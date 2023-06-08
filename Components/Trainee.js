@@ -1,27 +1,51 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-function Trainee() {
+function Trainee({ trainee }) {
+  const { startTime } = trainee;
+  const date = new Date(startTime);
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  const calculateMediumSpeed = (speedArray) => {
+    if (speedArray.length === 0) {
+      return 0;
+    }
+    const averageVelocity =
+      speedArray.reduce((total, current) => total + current) /
+      speedArray.length;
+    return averageVelocity.toFixed(1);
+  };
   return (
     <View style={styles.trainee}>
-      <Text style={styles.traineeInfo}>09:00h - Barcelona, Catalunya</Text>
+      <Text style={styles.traineeInfo}>
+        {formattedDate} - Barcelona, Catalunya
+      </Text>
       <View style={styles.containerInfo}>
         <View style={styles.info}>
           <Text style={styles.infoTitle}>Distància</Text>
           <View style={styles.infoBlock}>
-            <Text style={styles.blockInfo}>1.2 Km</Text>
+            <Text style={styles.blockInfo}>
+              {trainee.distance.toFixed(2)} Km
+            </Text>
           </View>
         </View>
         <View style={styles.info}>
           <Text style={styles.infoTitle}>Velocitat</Text>
           <View style={styles.infoBlock}>
-            <Text style={styles.blockInfo}>3.9 m/s</Text>
+            <Text style={styles.blockInfo}>
+              {calculateMediumSpeed(JSON.parse(trainee.speed))} m/s
+            </Text>
           </View>
         </View>
         <View style={styles.info}>
           <Text style={styles.infoTitle}>Temps</Text>
           <View style={styles.infoBlock}>
-            <Text style={styles.blockInfo}>00:54</Text>
+            <Text style={styles.blockInfo}>{trainee.displayTime}</Text>
           </View>
         </View>
       </View>

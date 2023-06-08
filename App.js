@@ -3,6 +3,6 @@ import Navigation from "./Navigation";
 import { clearData } from "./services/local-storage";
 
 export default function App() {
-  // clearData();
+  clearData();
   return <Navigation />;
 }

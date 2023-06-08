@@ -6,7 +6,7 @@ import Register from "../Page/Register";
 import Profile from "../Page/Profile";
 import { useRoute } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { editUser, addTrainee } from "../services/data-manager";
+import { editUser, addTrainee, loadLocalData } from "../services/data-manager";
 
 const Tab = createBottomTabNavigator();
 
@@ -14,9 +14,8 @@ const NavigationMenu = () => {
   const route = useRoute();
   const [data, setData] = useState(route.params?.data ?? "default value");
 
-  useEffect(() => {
-    console.log("Datos", data);
-  }, [data]);
+
+  
   const handleEdit = (dataEdited) => {
     setData({
       ...data,

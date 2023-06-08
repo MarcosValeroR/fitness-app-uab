@@ -67,7 +67,7 @@ const addTrainee = async (id, trainee) => {
     ...Globals.users[id - 1],
     trainees: [...Globals.users[id - 1].trainees, trainee],
   };
-  console.log(Globals.users[id - 1].trainees);
+
   await storeUsers();
 };
 

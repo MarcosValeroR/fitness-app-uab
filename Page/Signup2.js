@@ -54,7 +54,9 @@ function Signup2() {
         navigation.navigate("SignupScreen");
       } else {
         addUser(newUser);
-        navigation.navigate("NavigationMenuScreen", { data: newUser });
+        navigation.navigate("NavigationMenuScreen", {
+          data: searchUser(newUser.mail, newUser.passwd),
+        });
       }
     }
   };
