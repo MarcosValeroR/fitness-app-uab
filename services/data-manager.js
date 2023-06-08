@@ -38,7 +38,6 @@ const addImgUser = async (idUser, newData) => {
   await storeUsers();
 };
 const editUser = async (id, newData) => {
-  console.log("Datos editados", newData);
   Globals.users[id - 1] = {
     ...Globals.users[id - 1],
     mail: newData.mail,
@@ -47,7 +46,7 @@ const editUser = async (id, newData) => {
     weight: newData.weight,
     height: newData.height,
   };
-
+  console.log("data edited correctly");
   await storeUsers();
 };
 const searchUser = (mail, passwd) => {
@@ -63,6 +62,15 @@ const searchUser = (mail, passwd) => {
   return "User not found";
 };
 
+const addTrainee = async (id, trainee) => {
+  Globals.users[id - 1] = {
+    ...Globals.users[id - 1],
+    trainees: [...Globals.users[id - 1].trainees, trainee],
+  };
+  console.log(Globals.users[id - 1].trainees);
+  await storeUsers();
+};
+
 export {
   loadLocalData,
   getUsers,
@@ -71,4 +79,5 @@ export {
   searchUser,
   addImgUser,
   editUser,
+  addTrainee,
 };

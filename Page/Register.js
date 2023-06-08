@@ -7,36 +7,18 @@ import {
   ScrollView,
 } from "react-native";
 import Header from "../Components/Header";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Trainee from "../Components/Trainee";
 
-const Register = () => {
-  const [trainees, setTrainees] = useState([
-    {
-      time: "00:12",
-      distance: 0.03,
-      speed: 3.2,
-      date: new Date(1995, 11, 17),
-    },
-    {
-      time: "00:12",
-      distance: 0.03,
-      speed: 3.2,
-      date: new Date(1995, 11, 17),
-    },
-    {
-      time: "00:12",
-      distance: 0.03,
-      speed: 3.2,
-      date: new Date(1995, 11, 17),
-    },
-    {
-      time: "00:12",
-      distance: 0.03,
-      speed: 3.2,
-      date: new Date(1995, 11, 17),
-    },
-  ]);
+const Register = ({ data }) => {
+  const [trainees, setTrainees] = useState(data.trainees);
+  useEffect(() => {
+    
+      console.log("Entrenamientos", trainees);
+      const { routeCoordinates, speed } = trainees[0];
+      console.log("Parseado", JSON.parse(routeCoordinates));
+    
+  }, [trainees]);
   return (
     <SafeAreaView style={styles.container}>
       <Header headerTitle={"REGISTRE"} isNavigationIcon={false} />

@@ -6,7 +6,7 @@ import Register from "../Page/Register";
 import Profile from "../Page/Profile";
 import { useRoute } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { editUser } from "../services/data-manager";
+import { editUser, addTrainee } from "../services/data-manager";
 
 const Tab = createBottomTabNavigator();
 
@@ -15,9 +15,8 @@ const NavigationMenu = () => {
   const [data, setData] = useState(route.params?.data ?? "default value");
 
   useEffect(() => {
-    console.log("DATOS", data);
+    console.log("Datos", data);
   }, [data]);
-
   const handleEdit = (dataEdited) => {
     setData({
       ...data,
@@ -27,12 +26,19 @@ const NavigationMenu = () => {
       height: dataEdited.height,
       weight: dataEdited.weight,
     });
-    editUser(data.id,dataEdited)
+    editUser(data.id, dataEdited);
   };
-  
+
   const handleTrainees = (trainee) => {
-    
-  }
+    //Stringify para poder guardarlo en el array de datos, sino se guarda con valor [Array], para recuperar los datos a su estado original hacer parse cuando se vayan a usar
+    const traineeCopy = {
+      ...trainee,
+      routeCoordinates: JSON.stringify(trainee.routeCoordinates),
+      speed: JSON.stringify(trainee.speed),
+    };
+    setData({ ...data, trainees: [...data.trainees, traineeCopy] });
+    addTrainee(data.id, traineeCopy);
+  };
   return (
     <Tab.Navigator
       styles={styles.menu}
@@ -56,13 +62,15 @@ const NavigationMenu = () => {
       <Tab.Screen
         styles={styles.menuItem}
         name="INICI"
-        children={() => <Welcome data={data} handleTrainees={handleTrainees}/>}
+        children={() => (
+          <Welcome data={data} handleNewTrainee={handleTrainees} />
+        )}
         options={{ headerShown: false }}
       />
       <Tab.Screen
         styles={styles.menuItem}
         name="REGISTRE"
-        children={() => <Register />}
+        children={() => <Register data={data} />}
         options={{ headerShown: false }}
       />
       <Tab.Screen

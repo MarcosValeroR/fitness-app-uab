@@ -20,7 +20,7 @@ const LATITUDEDELTA = 0.0112;
 const LONGITUDE = -122.4324;
 const LATITUDE = 37.78825;
 
-function Welcome({ data }) {
+function Welcome({ data, handleNewTrainee }) {
   //Estados Map
   const [routeCoordinates, setRouteCoordinates] = useState([]);
   const [latitude, setLatitude] = useState(LATITUDE);
@@ -50,7 +50,6 @@ function Welcome({ data }) {
   }, [seconds]);
 
   useEffect(() => {
-
     if (routeCoordinates.length === 0) {
     } else if (routeCoordinates.length === 1) {
       setDistance(
@@ -132,11 +131,19 @@ function Welcome({ data }) {
   const stop = () => {
     clearInterval(intervalId);
 
+    const newTrainee = {
+      routeCoordinates,
+      distance,
+      speed,
+      startTime,
+      displayTime,
+    };
+    handleNewTrainee(newTrainee);
     //Despues de guardar los datos
     setIntervalId(null);
     setStartTrainee(false);
   };
-  
+
   const formatTime = (time) => time.toString().padStart(2, "0");
   const displayTime = `${formatTime(minutes)}:${formatTime(seconds)}`;
 
