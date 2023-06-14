@@ -11,9 +11,15 @@ import {
 import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 
 const windowWidth = Dimensions.get("window").width;
+const LONGITUDEDELTA = 0.0113;
+const LATITUDEDELTA = 0.0112;
+const LONGITUDE = -122.4324;
+const LATITUDE = 37.78825;
 
 function Trainee({ trainee }) {
-  const { startTime } = trainee;
+  const [region, setRegion] = useState(null);
+  const { startTime, routeCoordinates } = trainee;
+  const parsedCoordinates = JSON.parse(routeCoordinates);
   const [openModal, setOpenModal] = useState(false);
   const date = new Date(startTime);
   const day = date.getDate();
@@ -31,6 +37,23 @@ function Trainee({ trainee }) {
       speedArray.reduce((total, current) => total + current) /
       speedArray.length;
     return averageVelocity.toFixed(1);
+  };
+  const getMapRegion = () => {
+    if (parsedCoordinates.length > 0) {
+      return {
+        latitude: parsedCoordinates[parsedCoordinates.length - 1]["latitude"],
+        longitude: parsedCoordinates[parsedCoordinates.length - 1]["longitude"],
+        latitudeDelta: LATITUDEDELTA,
+        longitudeDelta: LONGITUDEDELTA,
+      };
+    } else {
+      return {
+        latitude: LATITUDE,
+        longitude: LONGITUDE,
+        latitudeDelta: LATITUDEDELTA,
+        longitudeDelta: LONGITUDEDELTA,
+      };
+    }
   };
   return (
     <>
@@ -55,13 +78,24 @@ function Trainee({ trainee }) {
                 }}
               >
                 <View style={styles.containerMap}>
-                  <MapView
-                    style={styles.map}
-                    provider={PROVIDER_GOOGLE}
-                    showsUserLocation
-                    followsUserLocation
-                    loadingEnabled
-                  ></MapView>
+                  {parsedCoordinates.length > 0 ? (
+                    <MapView
+                      style={styles.map}
+                      provider={PROVIDER_GOOGLE}
+                      region={getMapRegion()}
+                      showsUserLocation
+                      followsUserLocation
+                      loadingEnabled
+                    >
+                      <Polyline
+                        coordinates={parsedCoordinates}
+                        strokeWidth={2}
+                        strokeColor="red"
+                      />
+                    </MapView>
+                  ) : (
+                    <Text>No has reccoregut cap distància!</Text>
+                  )}
                 </View>
               </View>
               <Pressable
