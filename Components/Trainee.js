@@ -1,8 +1,20 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  Pressable,
+  Dimensions,
+} from "react-native";
+import MapView, { Polyline, PROVIDER_GOOGLE } from "react-native-maps";
+
+const windowWidth = Dimensions.get("window").width;
 
 function Trainee({ trainee }) {
   const { startTime } = trainee;
+  const [openModal, setOpenModal] = useState(false);
   const date = new Date(startTime);
   const day = date.getDate();
   const month = date.getMonth() + 1;
@@ -21,39 +33,138 @@ function Trainee({ trainee }) {
     return averageVelocity.toFixed(1);
   };
   return (
-    <View style={styles.trainee}>
-      <Text style={styles.traineeInfo}>
-        {formattedDate} - Barcelona, Catalunya
-      </Text>
-      <View style={styles.containerInfo}>
-        <View style={styles.info}>
-          <Text style={styles.infoTitle}>Distància</Text>
-          <View style={styles.infoBlock}>
-            <Text style={styles.blockInfo}>
-              {trainee.distance.toFixed(2)} Km
-            </Text>
+    <>
+      <View style={styles.modal}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={openModal}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setOpenModal(!openModal);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Ruta realitzada</Text>
+              <View
+                style={{
+                  height: 400,
+                  width: 350,
+                  paddingBottom: 10,
+                }}
+              >
+                <View style={styles.containerMap}>
+                  <MapView
+                    style={styles.map}
+                    provider={PROVIDER_GOOGLE}
+                    showsUserLocation
+                    followsUserLocation
+                    loadingEnabled
+                  ></MapView>
+                </View>
+              </View>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => setOpenModal(!openModal)}
+              >
+                <Text style={styles.textStyle}>Tanca</Text>
+              </Pressable>
+            </View>
           </View>
-        </View>
-        <View style={styles.info}>
-          <Text style={styles.infoTitle}>Velocitat</Text>
-          <View style={styles.infoBlock}>
-            <Text style={styles.blockInfo}>
-              {calculateMediumSpeed(JSON.parse(trainee.speed))} m/s
-            </Text>
-          </View>
-        </View>
-        <View style={styles.info}>
-          <Text style={styles.infoTitle}>Temps</Text>
-          <View style={styles.infoBlock}>
-            <Text style={styles.blockInfo}>{trainee.displayTime}</Text>
-          </View>
-        </View>
+        </Modal>
       </View>
-    </View>
+
+      <TouchableOpacity onPress={() => setOpenModal(!openModal)}>
+        <View style={styles.trainee}>
+          <Text style={styles.traineeInfo}>
+            {formattedDate} - Barcelona, Catalunya
+          </Text>
+          <View style={styles.containerInfo}>
+            <View style={styles.info}>
+              <Text style={styles.infoTitle}>Distància</Text>
+              <View style={styles.infoBlock}>
+                <Text style={styles.blockInfo}>
+                  {trainee.distance.toFixed(2)} Km
+                </Text>
+              </View>
+            </View>
+            <View style={styles.info}>
+              <Text style={styles.infoTitle}>Velocitat</Text>
+              <View style={styles.infoBlock}>
+                <Text style={styles.blockInfo}>
+                  {calculateMediumSpeed(JSON.parse(trainee.speed))} m/s
+                </Text>
+              </View>
+            </View>
+            <View style={styles.info}>
+              <Text style={styles.infoTitle}>Temps</Text>
+              <View style={styles.infoBlock}>
+                <Text style={styles.blockInfo}>{trainee.displayTime}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  containerMap: {
+    height: "100%",
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "black",
+    borderWidth: 1,
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "red",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    marginBottom: 15,
+    textAlign: "center",
+  },
   trainee: {
     marginVertical: 10,
     height: 110,
